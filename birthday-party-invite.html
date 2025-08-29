@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>37th Birthday Celebration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light gray-blue for a clean background */
+            color: #1e293b; /* Dark charcoal for text */
+        }
+        .text-accent {
+            color: #0d9488; /* Deep teal for a sophisticated accent */
+        }
+        .bg-accent-light {
+            background-color: #e0f2f1; /* Lighter shade of teal for cards */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-slate-800">
+
+    <div class="container mx-auto p-4 sm:p-8 md:p-12 lg:p-16">
+        <header class="text-center mb-10 mt-6">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 leading-tight tracking-tight">
+                An Evening to Celebrate
+            </h1>
+            <p id="countdown-text" class="text-xl sm:text-2xl mt-4 font-semibold text-accent">Loading countdown...</p>
+            <p id="party-date" class="text-lg sm:text-xl font-medium mt-2 text-slate-700">
+                You are cordially invited on <span class="font-bold"></span>
+            </p>
+        </header>
+        
+        <main>
+            <div id="schedule-container" class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 md:p-10 lg:p-12 border border-slate-200">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center text-slate-900 mb-8">Weekend Agenda</h2>
+
+                <!-- Schedule for each day will be generated here -->
+                <div id="schedule-content" class="space-y-10"></div>
+                
+            </div>
+            
+            <div id="accommodation-container" class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 md:p-10 lg:p-12 border border-slate-200 mt-12">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center text-slate-900 mb-8">Accommodation</h2>
+                <!-- Accommodation details will be generated here -->
+                <div id="accommodation-content" class="space-y-8"></div>
+            </div>
+
+            <div id="travel-container" class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 md:p-10 lg:p-12 border border-slate-200 mt-12">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center text-slate-900 mb-8">Travel Logistics</h2>
+                <!-- Flight details will be generated here -->
+                <div id="travel-content" class="space-y-8"></div>
+            </div>
+
+            <!-- Custom message box -->
+            <div id="message-box" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden">
+                <div class="bg-white rounded-xl shadow-2xl p-6 max-w-sm w-full text-center transform transition-all scale-95 duration-300">
+                    <p id="message-text" class="text-lg font-semibold text-gray-800 mb-4"></p>
+                    <button onclick="hideMessage()" class="bg-slate-800 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-slate-700 transition-colors duration-200">Dismiss</button>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="text-center mt-10 text-slate-700 text-sm">
+            <p class="font-semibold">Your presence is the greatest gift.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Event details - easily editable!
+            const partyDetails = {
+                date: "Sep 5-7",
+                schedule: [
+                    {
+                        day: "Friday",
+                        date: "Sep 5",
+                        title: "Gondola ride to Kobi",
+                        description: "An exciting ride on the Gudauri gondola with breathtaking views of the Caucasus mountains.",
+                        time: "12:00 PM",
+                        color: "bg-teal-50",
+                        image: "https://scontent.ftbs9-2.fna.fbcdn.net/v/t39.30808-6/481701591_594900693368306_2828559091160007606_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGS-zgj6RxP6T5c-bOfPMvGHHV9E1QtjqocdX0TVC2OqgO3G4W1A8VbaIcb4Lafjh3Hgz7A1-16LtImtDslN2EP&_nc_ohc=JdX5F1UbOOwQ7kNvwFw7e_Y&_nc_oc=AdlTktCSIImKUmxeG1QQ2JWsBjvIFWX7TgQtPrJHOK9BwnzloM6poZm9Citu5gzcSEU&_nc_zt=23&_nc_ht=scontent.ftbs9-2.fna&_nc_gid=ZYGtDup8xercO14fS7n16Q&oh=00_AfWMDp5IMBqI8g-XUx1OIv4f9HY7RCq6KKcL6v_wYnTQgg&oe=68B7F502"
+                    },
+                    {
+                        day: "Friday",
+                        date: "Sep 5",
+                        title: "Grill",
+                        description: "An evening of grilled food and good company to kick off the weekend festivities.",
+                        time: "6:00 PM onwards",
+                        color: "bg-slate-50",
+                        image: "https://cfishct.com/wp-content/uploads/2019/07/Depositphotos_50136479_s-2019.jpg"
+                    },
+                    {
+                        day: "Saturday",
+                        date: "Sep 6",
+                        title: "Travel to Kazbegi, Visiting Gergeti Church",
+                        description: "A scenic trip to Kazbegi to visit the iconic Gergeti Trinity Church, perched high in the mountains.",
+                        time: "11:00 AM",
+                        color: "bg-slate-50",
+                        image: "https://tourguide.ge/wp-content/uploads/2019/03/Close-to-God.jpg"
+                    },
+                    {
+                        day: "Saturday",
+                        date: "Sep 6",
+                        title: "Hike to Cafe 360, 3000m",
+                        description: "A hike to the high-altitude Cafe 360 for stunning panoramic views.",
+                        time: "1:00 PM",
+                        color: "bg-teal-50",
+                        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF8UWz7Y4tO3MZBWhenMBMoVs8nU1xejfhy-wcZVhDClYZtdZjCBCltrSVu50FVWv5vX4&usqp=CAU"
+                    },
+                    {
+                        day: "Saturday",
+                        date: "Sep 6",
+                        title: "Optional: Paragliding",
+                        description: "An optional paragliding experience with stunning views of the Caucasus mountains.",
+                        time: "2:30 PM",
+                        color: "bg-slate-50",
+                        image: "https://cdn.georgiantravelguide.com/storage/files/paraplanit-frena-gudaurshi-1.jpg"
+                    },
+                    {
+                        day: "Saturday",
+                        date: "Sep 6",
+                        title: "Dinner at Maisi",
+                        description: "An evening of traditional Georgian food at the Restaurant Maisi. https://maps.app.goo.gl/WRdVv1chExvoveS6A",
+                        time: "5:00 PM",
+                        color: "bg-slate-50",
+                        image: "https://wander-lush.org/wp-content/uploads/2024/07/Emily-Lush-Kazbegi-restaurants-Tiba.jpg"
+                    },
+                    {
+                        day: "Sunday",
+                        date: "Sep 7",
+                        title: "Gudauri Church Visit",
+                        description: "A morning trip to see the beautiful Gudauri Church, nestled in the stunning Caucasus mountains.",
+                        time: "9:30 AM",
+                        color: "bg-slate-50",
+                        image: "https://thumbs.dreamstime.com/b/orthodox-church-gudauri-georgia-orthodox-church-gudauri-georgia-beautiful-majestic-caucasus-mountains-100009315.jpg"
+                    },
+                    {
+                        day: "Sunday",
+                        date: "Sep 7",
+                        title: "Brunch",
+                        description: "Taste best khinkali at at Pasanauri restaraunt",
+                        time: "11:00 AM",
+                        color: "bg-teal-50",
+                        image: "https://breadandwine.ge/wp-content/uploads/2021/11/khinkali-768x461.webp"
+                    },
+                    {
+                        day: "Sunday",
+                        date: "Sep 7",
+                        title: "Rafting in Passanauri",
+                        description: "A thrilling rafting experience on the Aragvi River near Pasanauri.",
+                        time: "2:00 PM",
+                        color: "bg-teal-50",
+                        image: "https://tourguide.ge/wp-content/uploads/2019/07/Rafting-in-Georgia_3-800x600.jpg"
+                    },
+                    {
+                        day: "Sunday",
+                        date: "Sep 7",
+                        title: "Visiting Friendship Arch",
+                        description: "A visit to the iconic Friendship Arch with breathtaking views of the mountains and the Aragvi River gorge.",
+                        time: "4:00 PM",
+                        color: "bg-slate-50",
+                        image: "https://t4.ftcdn.net/jpg/05/07/29/05/360_F_507290549_dgg4QvgCeNTCqEVe2B4uxhknuahzHM2e.jpg"
+                    },
+                    {
+                        day: "Sunday",
+                        date: "Sep 7",
+                        title: "Dinner",
+                        description: "Relaxing dinner at home, farewell party",
+                        time: "6:00 PM",
+                        color: "bg-slate-50",
+                        image: "https://snow.ge/components/com_reservations/gallery/s1/rooms/large/g9/hlhe1393.jpg"
+                    },
+                    {
+                        day: "Monday",
+                        date: "Sep 8",
+                        title: "Optional: Visit Mtsheta",
+                        description: "If departure will be scheduled to evening, we can take a trip to explore the historic town of Mtsheta.",
+                        time: "2:00 PM",
+                        color: "bg-slate-50",
+                        image: "https://tourguide.ge/wp-content/uploads/2019/03/Mtskheta-downtown.jpg"
+                    }
+                ],
+                flight: {
+                    outbound: {
+                        date: "Thu, Sep 4",
+                        legs: [
+                            {
+                                airline: "FLYONE Armenia",
+                                departure: {
+                                    airport: "Zvartnots International",
+                                    time: "5:05 PM",
+                                    code: "EVN"
+                                },
+                                arrival: {
+                                    airport: "Tbilisi",
+                                    time: "5:50 PM",
+                                    code: "TBS",
+                                    date: "Sep 4"
+                                },
+                                duration: "0 hour 45 minutes",
+                                type: "Direct"
+                            }
+                        ]
+                    },
+                    return: [
+                        {
+                            option: "Option 1",
+                            date: "Mon, Sep 8",
+                            airline: "Georgian Airways",
+                            legs: [
+                                {
+                                    airline: "Georgian Airways",
+                                    departure: {
+                                        airport: "Tbilisi",
+                                        time: "8:45 AM",
+                                        code: "TBS"
+                                },
+                                    arrival: {
+                                        airport: "Zvartnots International",
+                                        time: "9:15 AM",
+                                        code: "EVN"
+                                    },
+                                    duration: "0 hour 30 minutes",
+                                    type: "Direct"
+                                }
+                            ]
+                        },
+                        {
+                            option: "Option 2",
+                            date: "Mon, Sep 8",
+                            airline: "FLYONE Armenia",
+                            legs: [
+                                {
+                                    airline: "FLYONE Armenia",
+                                    departure: {
+                                        airport: "Tbilisi",
+                                        time: "6:50 PM",
+                                        code: "TBS"
+                                    },
+                                    arrival: {
+                                        airport: "Zvartnots International",
+                                        time: "7:40 PM",
+                                        code: "EVN"
+                                    },
+                                    duration: "0 hour 50 minutes",
+                                    type: "Direct"
+                                }
+                            ]
+                        },
+                        {
+                            option: "Option 3",
+                            date: "Mon, Sep 8",
+                            airline: "flydubai",
+                            legs: [
+                                {
+                                    airline: "flydubai",
+                                    departure: {
+                                        airport: "Tbilisi",
+                                        time: "12:25 PM",
+                                        code: "TBS"
+                                    },
+                                    arrival: {
+                                        airport: "Dubai",
+                                        time: "3:35 PM",
+                                        code: "DXB"
+                                    },
+                                    duration: "3 hours 10 minutes",
+                                    type: "Direct"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                accommodation: {
+                    title: "Our Suite",
+                    description: "We've rented a spacious 3-bedroom, 2-bathroom suite with a fully equipped kitchen and a breathtaking view of the mountains. This will be our home base for the weekend.",
+                    images: [
+                        "https://snow.ge/components/com_reservations/gallery/s1/rooms/large/g9/gslc2737.jpg",
+                        "https://snow.ge/components/com_reservations/gallery/s1/rooms/large/g9/blta2453.jpg",
+                        "https://snow.ge/components/com_reservations/gallery/s1/rooms/large/g9/balcony%202.jpg",
+                        "https://snow.ge/components/com_reservations/gallery/s1/rooms/large/g9/kabe8592.jpg",
+                        "https://snow.ge/components/com_reservations/gallery/s1/rooms/large/g9/426%20s%2015122019%201.jpg",
+                        "https://snow.ge/components/com_reservations/gallery/s1/rooms/large/g9/img_6751.jpg"
+                        
+                    ]
+                }
+            };
+            
+            // Set the event date in the HTML
+            document.querySelector('#party-date span').textContent = partyDetails.date;
+
+            // Generate the schedule content dynamically
+            const scheduleContent = document.getElementById('schedule-content');
+            let currentDay = "";
+
+            partyDetails.schedule.forEach(item => {
+                if (item.day !== currentDay) {
+                    currentDay = item.day;
+                    const dayHeader = document.createElement('h3');
+                    dayHeader.className = "text-xl sm:text-2xl font-bold text-slate-900 mt-8 mb-4 border-b-2 border-slate-300 pb-2";
+                    dayHeader.textContent = `${item.day}, ${item.date}`;
+                    scheduleContent.appendChild(dayHeader);
+                }
+
+                const card = document.createElement('div');
+                card.className = `p-6 rounded-2xl shadow-sm border border-slate-200 transition-transform transform hover:scale-[1.01] ${item.color}`;
+                card.innerHTML = `
+                    <img src="${item.image}" alt="${item.title}" class="w-full rounded-xl mb-4 shadow-md">
+                    <div class="flex items-center space-x-4 mb-2">
+                        <span class="text-xl sm:text-2xl font-bold text-slate-900">${item.title}</span>
+                    </div>
+                    <p class="text-sm sm:text-base text-slate-600 mt-2">${item.description}</p>
+                    <p class="text-sm sm:text-base font-semibold text-slate-700 mt-2">Time: ${item.time}</p>
+                `;
+                scheduleContent.appendChild(card);
+            });
+
+            // Generate the accommodation content dynamically
+            const accommodationContent = document.getElementById('accommodation-content');
+            const accommodation = partyDetails.accommodation;
+            if (accommodation) {
+                const title = document.createElement('h3');
+                title.className = "text-lg sm:text-xl font-bold text-slate-800 mb-2";
+                title.textContent = accommodation.title;
+                accommodationContent.appendChild(title);
+
+                const description = document.createElement('p');
+                description.className = "text-sm sm:text-base text-slate-600 mb-4";
+                description.textContent = accommodation.description;
+                accommodationContent.appendChild(description);
+
+                const imageContainer = document.createElement('div');
+                imageContainer.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4";
+                accommodation.images.forEach(image => {
+                    const img = document.createElement('img');
+                    img.src = image;
+                    img.alt = "Suite image";
+                    img.className = "w-full h-auto rounded-xl shadow-md";
+                    imageContainer.appendChild(img);
+                });
+                accommodationContent.appendChild(imageContainer);
+            }
+            
+            // Generate the travel details dynamically
+            const travelContent = document.getElementById('travel-content');
+            if (partyDetails.flight) {
+                let travelHtml = '';
+
+                // Outbound Flight
+                const outbound = partyDetails.flight.outbound;
+                travelHtml += `
+                    <div class="mb-6">
+                        <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-2">Departure: ${outbound.date}</h4>
+                        ${outbound.legs.map(leg => `
+                            <div class="p-4 rounded-xl shadow-md border border-slate-100 bg-slate-50 flex flex-col md:flex-row md:items-center justify-between mb-4">
+                                <div class="flex-1 mb-4 md:mb-0">
+                                    <div class="text-sm font-semibold text-slate-500">${leg.airline}</div>
+                                    <div class="flex items-center space-x-4 mt-2">
+                                        <div class="text-lg font-bold">${leg.departure.time}</div>
+                                        <div>
+                                            <div class="text-slate-600">${leg.departure.airport}</div>
+                                            <div class="text-sm font-medium text-slate-400">${leg.departure.code}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-center space-x-2 text-slate-500 mb-4 md:mb-0">
+                                    <span class="text-sm font-medium">${leg.duration}</span>
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                    </svg>
+                                    <span class="text-sm font-medium">${leg.type}</span>
+                                </div>
+                                <div class="flex-1 text-right">
+                                    <div class="flex items-center justify-end space-x-4">
+                                        <div>
+                                            <div class="text-slate-600">${leg.arrival.airport}</div>
+                                            <div class="text-sm font-medium text-slate-400">${leg.arrival.code}</div>
+                                        </div>
+                                        <div class="text-lg font-bold">${leg.arrival.time}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+
+                // Return Flights
+                const returnFlights = partyDetails.flight.return;
+                if (returnFlights && returnFlights.length > 0) {
+                    travelHtml += `
+                        <div>
+                            <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-2">Return Options: Mon, Sep 8</h4>
+                            ${returnFlights.map(option => `
+                                <div class="p-4 rounded-xl shadow-md border border-slate-100 bg-teal-50 flex flex-col mb-4">
+                                    <div class="flex items-center space-x-4 mb-2">
+                                        <div class="text-base font-semibold text-teal-800">${option.option}</div>
+                                        <div class="text-sm text-slate-500">${option.date}</div>
+                                    </div>
+                                    ${option.legs.map(leg => `
+                                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 mt-2">
+                                            <div class="flex-1 mb-4 md:mb-0">
+                                                <div class="text-sm font-semibold text-slate-500">${leg.airline}</div>
+                                                <div class="flex items-center space-x-4 mt-2">
+                                                    <div class="text-lg font-bold">${leg.departure.time}</div>
+                                                    <div>
+                                                        <div class="text-slate-600">${leg.departure.airport}</div>
+                                                        <div class="text-sm font-medium text-slate-400">${leg.departure.code}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center justify-center space-x-2 text-slate-500 mb-4 md:mb-0">
+                                                <span class="text-sm font-medium">${leg.duration}</span>
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                                </svg>
+                                                <span class="text-sm font-medium">${leg.type || ''}</span>
+                                            </div>
+                                            <div class="flex-1 text-right">
+                                                <div class="flex items-center justify-end space-x-4">
+                                                    <div>
+                                                        <div class="text-slate-600">${leg.arrival.airport}</div>
+                                                        <div class="text-sm font-medium text-slate-400">${leg.arrival.code}</div>
+                                                    </div>
+                                                    <div class="text-lg font-bold">${leg.arrival.time}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+
+                travelContent.innerHTML = travelHtml;
+            }
+
+
+            // Countdown Timer
+            const birthdayDate = new Date(partyDetails.date);
+            const countdownText = document.getElementById('countdown-text');
+
+            function updateCountdown() {
+                const now = new Date();
+                const diff = new Date("Sep 5") - now;
+
+                if (diff < 0) {
+                    countdownText.textContent = "The celebration is underway.";
+                    return;
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                countdownText.textContent = `${days} days, ${hours} hours, ${minutes} minutes until the celebration.`;
+            }
+
+            // Start the countdown timer
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+            
+            // Message Box functions
+            function showMessage(text) {
+                const messageBox = document.getElementById('message-box');
+                const messageText = document.getElementById('message-text');
+                messageText.textContent = text;
+                messageBox.classList.remove('hidden');
+            }
+
+            window.hideMessage = function() {
+                const messageBox = document.getElementById('message-box');
+                messageBox.classList.add('hidden');
+            };
+
+            // Initial message to the user when the page loads
+            window.onload = function() {
+                showMessage("Welcome. Please see the detailed event agenda and travel logistics below.");
+            };
+        });
+    </script>
+</body>
+</html>

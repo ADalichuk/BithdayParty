@@ -90,6 +90,9 @@
                     <button id="copy-calendar-link-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-full hover:bg-gray-300 transition-colors duration-300">
                         Copy Calendar Link
                     </button>
+                    <button id="download-ics-btn" class="px-4 py-2 bg-teal-600 text-white rounded-full hover:bg-teal-700 transition-colors duration-300">
+                        Download Calendar (.ics)
+                    </button>
                 </div>
             </div>
         </div>
@@ -483,6 +486,8 @@
             const calendarInfo = document.getElementById('calendar-info');
             const copyCalendarLinkBtn = document.getElementById('copy-calendar-link-btn');
 
+
+
             openModalBtn.addEventListener('click', () => {
                 modal.classList.remove('hidden');
                 setTimeout(() => modal.querySelector('div').classList.remove('scale-95'), 50);
@@ -526,6 +531,60 @@
                 setTimeout(() => {
                     copyCalendarLinkBtn.textContent = 'Copy Calendar Link';
                 }, 2000);
+            });
+
+            // Function to generate ICS file content
+            function generateICS(events) {
+                const pad = (num) => String(num).padStart(2, '0');
+
+                const formatDate = (dateStr, timeStr) => {
+                    const [month, day, year] = new Date(dateStr).toLocaleDateString('en-US').split('/');
+                    let [hour, minutePart] = timeStr.split(':');
+                    let [minute, meridiem] = minutePart ? minutePart.split(' ') : [hour, 'AM'];
+                    if (meridiem === 'PM' && hour !== '12') hour = parseInt(hour) + 12;
+                    if (meridiem === 'AM' && hour === '12') hour = 0;
+                    return `${year}${pad(month)}${pad(day)}T${pad(hour)}${pad(minute)}00Z`;
+                };
+
+                let ics = `BEGIN:VCALENDAR
+            VERSION:2.0
+            PRODID:-//A Weekend in Georgia//EN
+            CALSCALE:GREGORIAN
+            METHOD:PUBLISH
+            `;
+
+                events.forEach(e => {
+                    const start = formatDate(e.date, e.time.split(' ')[0] + ' ' + e.time.split(' ')[1] || 'AM');
+                    // Assuming 2-hour default duration if "onwards" not specified
+                    const endDate = new Date(new Date(e.date + ' ' + e.time).getTime() + 2*60*60*1000);
+                    const end = `${endDate.getUTCFullYear()}${pad(endDate.getUTCMonth()+1)}${pad(endDate.getUTCDate())}T${pad(endDate.getUTCHours())}${pad(endDate.getUTCMinutes())}00Z`;
+
+                    ics += `BEGIN:VEVENT
+            UID:${Date.now()}-${Math.random().toString(36).substring(2,10)}@weekendgeorgia
+            DTSTAMP:${new Date().toISOString().replace(/[-:]/g,'').split('.')[0]}Z
+            DTSTART:${start}
+            DTEND:${end}
+            SUMMARY:${e.title}
+            DESCRIPTION:${e.description}
+            END:VEVENT
+            `;
+                });
+
+                ics += 'END:VCALENDAR';
+                return ics;
+            }
+
+            // Trigger ICS download
+            const downloadICSBtn = document.getElementById('download-ics-btn');
+            downloadICSBtn.addEventListener('click', () => {
+                const icsContent = generateICS(partyDetails.schedule);
+                const blob = new Blob([icsContent], { type: 'text/calendar' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'Weekend_in_Georgia.ics';
+                a.click();
+                URL.revokeObjectURL(url);
             });
 
             // Countdown Logic

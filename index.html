@@ -533,17 +533,30 @@
                 }, 2000);
             });
 
-            // Function to generate ICS file content
+            // Function to generate ICS file content with smarter time handling
             function generateICS(events) {
                 const pad = (num) => String(num).padStart(2, '0');
 
-                const formatDate = (dateStr, timeStr) => {
-                    const [month, day, year] = new Date(dateStr).toLocaleDateString('en-US').split('/');
-                    let [hour, minutePart] = timeStr.split(':');
-                    let [minute, meridiem] = minutePart ? minutePart.split(' ') : [hour, 'AM'];
-                    if (meridiem === 'PM' && hour !== '12') hour = parseInt(hour) + 12;
-                    if (meridiem === 'AM' && hour === '12') hour = 0;
-                    return `${year}${pad(month)}${pad(day)}T${pad(hour)}${pad(minute)}00Z`;
+                const parseTime = (timeStr) => {
+                    if (!timeStr || timeStr.toLowerCase().includes('onwards')) {
+                        return { hours: 0, minutes: 0, durationHours: 2 }; // default 2 hours
+                    }
+                    const match = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
+                    if (!match) return { hours: 0, minutes: 0, durationHours: 2 };
+                    let [, h, m, meridiem] = match;
+                    h = parseInt(h);
+                    m = parseInt(m);
+                    if (meridiem) {
+                        if (meridiem.toUpperCase() === 'PM' && h !== 12) h += 12;
+                        if (meridiem.toUpperCase() === 'AM' && h === 12) h = 0;
+                    }
+                    return { hours: h, minutes: m, durationHours: 2 };
+                };
+
+                const formatDate = (dateStr, timeStr, addHours = 0) => {
+                    const eventDate = new Date(`${dateStr} ${timeStr}`);
+                    eventDate.setHours(eventDate.getHours() + addHours);
+                    return `${eventDate.getUTCFullYear()}${pad(eventDate.getUTCMonth()+1)}${pad(eventDate.getUTCDate())}T${pad(eventDate.getUTCHours())}${pad(eventDate.getUTCMinutes())}00Z`;
                 };
 
                 let ics = `BEGIN:VCALENDAR
@@ -554,10 +567,9 @@
             `;
 
                 events.forEach(e => {
-                    const start = formatDate(e.date, e.time.split(' ')[0] + ' ' + e.time.split(' ')[1] || 'AM');
-                    // Assuming 2-hour default duration if "onwards" not specified
-                    const endDate = new Date(new Date(e.date + ' ' + e.time).getTime() + 2*60*60*1000);
-                    const end = `${endDate.getUTCFullYear()}${pad(endDate.getUTCMonth()+1)}${pad(endDate.getUTCDate())}T${pad(endDate.getUTCHours())}${pad(endDate.getUTCMinutes())}00Z`;
+                    const { hours, minutes, durationHours } = parseTime(e.time);
+                    const start = formatDate(e.date, `${hours}:${minutes}`);
+                    const end = formatDate(e.date, `${hours}:${minutes}`, durationHours);
 
                     ics += `BEGIN:VEVENT
             UID:${Date.now()}-${Math.random().toString(36).substring(2,10)}@weekendgeorgia
@@ -586,7 +598,6 @@
                 a.click();
                 URL.revokeObjectURL(url);
             });
-
             // Countdown Logic
             const countdownTimer = document.getElementById('countdown-timer');
             const targetDate = new Date("September 4, 2025 00:00:00").getTime();

@@ -504,7 +504,7 @@
             // Prevent form submission and show confirmation message
             rsvpForm.addEventListener('submit', (event) => {
                 event.preventDefault();
-                messageBox.textContent = "Thank you for confirming your attendance! We can't wait to see you!";
+                messageBox.textContent = "Thank you for confirming your attendance!/n We can't wait to see you!";
                 messageBox.className = "mt-4 p-3 rounded-xl text-center font-semibold bg-green-100 text-green-700 block";
                 rsvpForm.style.display = 'none';
                 calendarInfo.style.display = 'block';

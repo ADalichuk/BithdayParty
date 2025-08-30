@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>37th Birthday Celebration</title>
+    <title>A Weekend in Georgia</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,11 +27,10 @@
     <div class="container mx-auto p-4 sm:p-8 md:p-12 lg:p-16">
         <header class="text-center mb-10 mt-6">
             <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 leading-tight tracking-tight">
-                An Evening to Celebrate
+                Weekend in Georgia
             </h1>
-            <p id="countdown-text" class="text-xl sm:text-2xl mt-4 font-semibold text-accent">Loading countdown...</p>
             <p id="party-date" class="text-lg sm:text-xl font-medium mt-2 text-slate-700">
-                You are cordially invited on <span class="font-bold"></span>
+                A weekend adventure from <span class="font-bold"></span>
             </p>
         </header>
         
@@ -55,18 +54,10 @@
                 <!-- Flight details will be generated here -->
                 <div id="travel-content" class="space-y-8"></div>
             </div>
-
-            <!-- Custom message box -->
-            <div id="message-box" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden">
-                <div class="bg-white rounded-xl shadow-2xl p-6 max-w-sm w-full text-center transform transition-all scale-95 duration-300">
-                    <p id="message-text" class="text-lg font-semibold text-gray-800 mb-4"></p>
-                    <button onclick="hideMessage()" class="bg-slate-800 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-slate-700 transition-colors duration-200">Dismiss</button>
-                </div>
-            </div>
         </main>
         
         <footer class="text-center mt-10 text-slate-700 text-sm">
-            <p class="font-semibold">Your presence is the greatest gift.</p>
+            <p class="font-semibold">We look forward to sharing this adventure with you.</p>
         </footer>
     </div>
 
@@ -75,8 +66,17 @@
 
             // Event details - easily editable!
             const partyDetails = {
-                date: "Sep 5-7",
+                date: "Sep 4-7",
                 schedule: [
+                    {
+                        day: "Thursday",
+                        date: "Sep 4",
+                        title: "Meet & Greet",
+                        description: "Welcoming dinner at home.",
+                        time: "8:00 PM",
+                        color: "bg-slate-50",
+                        image: "https://snow.ge/components/com_reservations/gallery/s1/rooms/large/g9/hlhe1393.jpg"
+                    },
                     {
                         day: "Friday",
                         date: "Sep 5",
@@ -84,7 +84,7 @@
                         description: "An exciting ride on the Gudauri gondola with breathtaking views of the Caucasus mountains.",
                         time: "12:00 PM",
                         color: "bg-teal-50",
-                        image: "https://scontent.ftbs9-2.fna.fbcdn.net/v/t39.30808-6/481701591_594900693368306_2828559091160007606_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGS-zgj6RxP6T5c-bOfPMvGHHV9E1QtjqocdX0TVC2OqgO3G4W1A8VbaIcb4Lafjh3Hgz7A1-16LtImtDslN2EP&_nc_ohc=JdX5F1UbOOwQ7kNvwFw7e_Y&_nc_oc=AdlTktCSIImKUmxeG1QQ2JWsBjvIFWX7TgQtPrJHOK9BwnzloM6poZm9Citu5gzcSEU&_nc_zt=23&_nc_ht=scontent.ftbs9-2.fna&_nc_gid=ZYGtDup8xercO14fS7n16Q&oh=00_AfWMDp5IMBqI8g-XUx1OIv4f9HY7RCq6KKcL6v_wYnTQgg&oe=68B7F502"
+                        image: "https://georgia.travel/images/2021/04/gudauri-ski-resort-gondola-georgia-16183916913165.jpg"
                     },
                     {
                         day: "Friday",
@@ -93,14 +93,14 @@
                         description: "An evening of grilled food and good company to kick off the weekend festivities.",
                         time: "6:00 PM onwards",
                         color: "bg-slate-50",
-                        image: "https://cfishct.com/wp-content/uploads/2019/07/Depositphotos_50136479_s-2019.jpg"
+                        image: "https://assets.epicurious.com/photos/57d0468623c691f13ac8c1f5/master/w_1000,h_748,c_limit/grilled-fish.jpg"
                     },
                     {
                         day: "Saturday",
                         date: "Sep 6",
                         title: "Travel to Kazbegi, Visiting Gergeti Church",
                         description: "A scenic trip to Kazbegi to visit the iconic Gergeti Trinity Church, perched high in the mountains.",
-                        time: "11:00 AM",
+                        time: "12:00 AM",
                         color: "bg-slate-50",
                         image: "https://tourguide.ge/wp-content/uploads/2019/03/Close-to-God.jpg"
                     },
@@ -111,16 +111,7 @@
                         description: "A hike to the high-altitude Cafe 360 for stunning panoramic views.",
                         time: "1:00 PM",
                         color: "bg-teal-50",
-                        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF8UWz7Y4tO3MZBWhenMBMoVs8nU1xejfhy-wcZVhDClYZtdZjCBCltrSVu50FVWv5vX4&usqp=CAU"
-                    },
-                    {
-                        day: "Saturday",
-                        date: "Sep 6",
-                        title: "Optional: Paragliding",
-                        description: "An optional paragliding experience with stunning views of the Caucasus mountains.",
-                        time: "2:30 PM",
-                        color: "bg-slate-50",
-                        image: "https://cdn.georgiantravelguide.com/storage/files/paraplanit-frena-gudaurshi-1.jpg"
+                        image: "https://wander-lush.org/wp-content/uploads/2023/11/Cafe-360-Gudauri-Georgie.jpg"
                     },
                     {
                         day: "Saturday",
@@ -138,13 +129,13 @@
                         description: "A morning trip to see the beautiful Gudauri Church, nestled in the stunning Caucasus mountains.",
                         time: "9:30 AM",
                         color: "bg-slate-50",
-                        image: "https://thumbs.dreamstime.com/b/orthodox-church-gudauri-georgia-orthodox-church-gudauri-georgia-beautiful-majestic-caucasus-mountains-100009315.jpg"
+                        image: "https://travel-photo.s3.eu-central-1.amazonaws.com/Gudauri+Church+by+Zurab+Elizbarashvili.JPG"
                     },
                     {
                         day: "Sunday",
                         date: "Sep 7",
                         title: "Brunch",
-                        description: "Taste best khinkali at at Pasanauri restaraunt",
+                        description: "Taste the best khinkali at Pasanauri restaurant.",
                         time: "11:00 AM",
                         color: "bg-teal-50",
                         image: "https://breadandwine.ge/wp-content/uploads/2021/11/khinkali-768x461.webp"
@@ -152,11 +143,20 @@
                     {
                         day: "Sunday",
                         date: "Sep 7",
-                        title: "Rafting in Passanauri",
+                        title: "Optional: Rafting in Passanauri",
                         description: "A thrilling rafting experience on the Aragvi River near Pasanauri.",
-                        time: "2:00 PM",
+                        time: "2:30 PM",
                         color: "bg-teal-50",
                         image: "https://tourguide.ge/wp-content/uploads/2019/07/Rafting-in-Georgia_3-800x600.jpg"
+                    },
+                    {
+                        day: "Saturday",
+                        date: "Sep 7",
+                        title: "Optional: Paragliding",
+                        description: "Discover stunning views of the Caucasus mountains from a tandem paraglide.",
+                        time: "2:30 PM",
+                        color: "bg-slate-50",
+                        image: "https://cdn.georgiantravelguide.com/storage/files/paraplanit-frena-gudaurshi-1.jpg"
                     },
                     {
                         day: "Sunday",
@@ -165,7 +165,7 @@
                         description: "A visit to the iconic Friendship Arch with breathtaking views of the mountains and the Aragvi River gorge.",
                         time: "4:00 PM",
                         color: "bg-slate-50",
-                        image: "https://t4.ftcdn.net/jpg/05/07/29/05/360_F_507290549_dgg4QvgCeNTCqEVe2B4uxhknuahzHM2e.jpg"
+                        image: "https://www.georgiantravelguide.com/storage/files/travel-guide-in-georgia-3914.jpg"
                     },
                     {
                         day: "Sunday",
@@ -179,8 +179,8 @@
                     {
                         day: "Monday",
                         date: "Sep 8",
-                        title: "Optional: Visit Mtsheta",
-                        description: "If departure will be scheduled to evening, we can take a trip to explore the historic town of Mtsheta.",
+                        title: "Optional: Visit Mtskheta",
+                        description: "If departure is scheduled for the evening, we can take a trip to explore the historic town of Mtskheta.",
                         time: "2:00 PM",
                         color: "bg-slate-50",
                         image: "https://tourguide.ge/wp-content/uploads/2019/03/Mtskheta-downtown.jpg"
@@ -220,7 +220,7 @@
                                         airport: "Tbilisi",
                                         time: "8:45 AM",
                                         code: "TBS"
-                                },
+                                    },
                                     arrival: {
                                         airport: "Zvartnots International",
                                         time: "9:15 AM",
@@ -284,7 +284,7 @@
                         "https://snow.ge/components/com_reservations/gallery/s1/rooms/large/g9/gslc2737.jpg",
                         "https://snow.ge/components/com_reservations/gallery/s1/rooms/large/g9/blta2453.jpg",
                         "https://snow.ge/components/com_reservations/gallery/s1/rooms/large/g9/balcony%202.jpg",
-                        "https://snow.ge/components/com_reservations/gallery/s1/rooms/large/g9/kabe8592.jpg",
+                        "https://snow.ge/components/com_reservations/gallery/s1/rooms/large/g9/uvxg6537.jpg",
                         "https://snow.ge/components/com_reservations/gallery/s1/rooms/large/g9/426%20s%2015122019%201.jpg",
                         "https://snow.ge/components/com_reservations/gallery/s1/rooms/large/g9/img_6751.jpg"
                         
@@ -311,7 +311,7 @@
                 const card = document.createElement('div');
                 card.className = `p-6 rounded-2xl shadow-sm border border-slate-200 transition-transform transform hover:scale-[1.01] ${item.color}`;
                 card.innerHTML = `
-                    <img src="${item.image}" alt="${item.title}" class="w-full rounded-xl mb-4 shadow-md">
+                    <img src="${item.image}" alt="${item.title}" class="w-full rounded-xl mb-4 shadow-md" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/64748b?text=Image+Not+Found';this.style.filter='grayscale(100%)';">
                     <div class="flex items-center space-x-4 mb-2">
                         <span class="text-xl sm:text-2xl font-bold text-slate-900">${item.title}</span>
                     </div>
@@ -348,7 +348,7 @@
             }
             
             // Generate the travel details dynamically
-            const travelContent = document.getElementById('travel-content');
+            const travelContent = document.getElementById('travel-container');
             if (partyDetails.flight) {
                 let travelHtml = '';
 
@@ -440,50 +440,6 @@
 
                 travelContent.innerHTML = travelHtml;
             }
-
-
-            // Countdown Timer
-            const birthdayDate = new Date(partyDetails.date);
-            const countdownText = document.getElementById('countdown-text');
-
-            function updateCountdown() {
-                const now = new Date();
-                const diff = new Date("Sep 5") - now;
-
-                if (diff < 0) {
-                    countdownText.textContent = "The celebration is underway.";
-                    return;
-                }
-
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-                countdownText.textContent = `${days} days, ${hours} hours, ${minutes} minutes until the celebration.`;
-            }
-
-            // Start the countdown timer
-            setInterval(updateCountdown, 1000);
-            updateCountdown();
-            
-            // Message Box functions
-            function showMessage(text) {
-                const messageBox = document.getElementById('message-box');
-                const messageText = document.getElementById('message-text');
-                messageText.textContent = text;
-                messageBox.classList.remove('hidden');
-            }
-
-            window.hideMessage = function() {
-                const messageBox = document.getElementById('message-box');
-                messageBox.classList.add('hidden');
-            };
-
-            // Initial message to the user when the page loads
-            window.onload = function() {
-                showMessage("Welcome. Please see the detailed event agenda and travel logistics below.");
-            };
         });
     </script>
 </body>

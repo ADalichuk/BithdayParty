@@ -54,7 +54,7 @@
             </div>
         </main>
 
-        <div class="mb-10 w-full rounded-2xl overflow-hidden shadow-xl p-6 sm:p-8 md:p-10 lg:p-12 border border-slate-200 aspect-video">
+        <div class="mb-10 w-full rounded-2xl overflow-hidden shadow-xl p-6 sm:p-8 md:p-10 lg:p-12 border border-slate-200 aspect-video mt-12">
             <iframe 
                 class="w-full h-full"
                 src="https://www.youtube.com/embed/APmtFYQUeq4" 
@@ -556,17 +556,4 @@
                     }
                     const match = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
                     if (!match) return { hours: 0, minutes: 0, durationHours: 2 };
-                    let [, h, m, meridiem] = match;
-                    h = parseInt(h);
-                    m = parseInt(m);
-                    if (meridiem) {
-                        if (meridiem.toUpperCase() === 'PM' && h !== 12) h += 12;
-                        if (meridiem.toUpperCase() === 'AM' && h === 12) h = 0;
-                    }
-                    return { hours: h, minutes: m };
-                };
-            }
-        });
-    </script>
-</body>
-</html>
+                    let [, h,

@@ -556,4 +556,17 @@
                     }
                     const match = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
                     if (!match) return { hours: 0, minutes: 0, durationHours: 2 };
-                    let [, h,
+                    let [, h, m, meridiem] = match;
+                    h = parseInt(h);
+                    m = parseInt(m);
+                    if (meridiem) {
+                        if (meridiem.toUpperCase() === 'PM' && h !== 12) h += 12;
+                        if (meridiem.toUpperCase() === 'AM' && h === 12) h = 0;
+                    }
+                    return { hours: h, minutes: m };
+                };
+            }
+        });
+    </script>
+</body>
+</html>

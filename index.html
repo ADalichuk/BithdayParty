@@ -29,31 +29,39 @@
             <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 leading-tight tracking-tight">
                 Weekend in Georgia
             </h1>
-            <!-- Countdown timer added here -->
             <p id="countdown-timer" class="text-lg sm:text-xl font-medium mt-2 text-slate-700"></p>
             <button id="open-modal-btn" class="mt-8 px-6 py-3 rounded-full bg-teal-600 text-white text-lg font-bold shadow-lg hover:bg-teal-700 transition-colors duration-300 transform hover:scale-105">
                 Confirm Your Attendance
             </button>
         </header>
         
+        <div class="mb-10 w-full rounded-2xl overflow-hidden shadow-xl border border-slate-200 aspect-video">
+            <iframe 
+                class="w-full h-full"
+                src="https://www.youtube.com/embed/5U77aJ-iR8k" 
+                title="YouTube video player" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerpolicy="strict-origin-when-cross-origin" 
+                allowfullscreen>
+            </iframe>
+        </div>
+        
         <main>
             <div id="schedule-container" class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 md:p-10 lg:p-12 border border-slate-200">
                 <h2 class="text-3xl sm:text-4xl font-bold text-center text-slate-900 mb-8">Agenda</h2>
 
-                <!-- Schedule for each day will be generated here -->
                 <div id="schedule-content" class="space-y-10"></div>
                 
             </div>
             
             <div id="accommodation-container" class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 md:p-10 lg:p-12 border border-slate-200 mt-12">
                 <h2 class="text-3xl sm:text-4xl font-bold text-center text-slate-900 mb-8">Accommodation</h2>
-                <!-- Accommodation details will be generated here -->
                 <div id="accommodation-content" class="space-y-8"></div>
             </div>
 
             <div id="travel-container" class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 md:p-10 lg:p-12 border border-slate-200 mt-12">
                 <h2 class="text-3xl sm:text-4xl font-bold text-center text-slate-900 mb-8">Travel Logistics</h2>
-                <!-- Flight details will be generated here -->
                 <div id="travel-content" class="space-y-8"></div>
             </div>
         </main>
@@ -63,7 +71,6 @@
         </footer>
     </div>
 
-    <!-- The Modal Popup -->
     <div id="rsvp-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden p-4">
         <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-lg w-full transform scale-95 transition-transform duration-300">
             <div class="flex justify-end">
@@ -495,8 +502,6 @@
             const calendarInfo = document.getElementById('calendar-info');
             const copyCalendarLinkBtn = document.getElementById('copy-calendar-link-btn');
 
-
-
             openModalBtn.addEventListener('click', () => {
                 modal.classList.remove('hidden');
                 setTimeout(() => modal.querySelector('div').classList.remove('scale-95'), 50);
@@ -545,7 +550,6 @@
             // Function to generate ICS file content with smarter time handling
             function generateICS(events) {
                 const pad = (num) => String(num).padStart(2, '0');
-
                 const parseTime = (timeStr) => {
                     if (!timeStr || timeStr.toLowerCase().includes('onwards')) {
                         return { hours: 0, minutes: 0, durationHours: 2 }; // default 2 hours
@@ -559,78 +563,9 @@
                         if (meridiem.toUpperCase() === 'PM' && h !== 12) h += 12;
                         if (meridiem.toUpperCase() === 'AM' && h === 12) h = 0;
                     }
-                    return { hours: h, minutes: m, durationHours: 2 };
+                    return { hours: h, minutes: m };
                 };
-
-                const formatDate = (dateStr, timeStr, addHours = 0) => {
-                    const eventDate = new Date(`${dateStr} ${timeStr}`);
-                    eventDate.setHours(eventDate.getHours() + addHours);
-                    return `${eventDate.getUTCFullYear()}${pad(eventDate.getUTCMonth()+1)}${pad(eventDate.getUTCDate())}T${pad(eventDate.getUTCHours())}${pad(eventDate.getUTCMinutes())}00Z`;
-                };
-
-                let ics = `BEGIN:VCALENDAR
-            VERSION:2.0
-            PRODID:-//A Weekend in Georgia//EN
-            CALSCALE:GREGORIAN
-            METHOD:PUBLISH
-            `;
-
-                events.forEach(e => {
-                    const { hours, minutes, durationHours } = parseTime(e.time);
-                    const start = formatDate(e.date, `${hours}:${minutes}`);
-                    const end = formatDate(e.date, `${hours}:${minutes}`, durationHours);
-
-                    ics += `BEGIN:VEVENT
-            UID:${Date.now()}-${Math.random().toString(36).substring(2,10)}@weekendgeorgia
-            DTSTAMP:${new Date().toISOString().replace(/[-:]/g,'').split('.')[0]}Z
-            DTSTART:${start}
-            DTEND:${end}
-            SUMMARY:${e.title}
-            DESCRIPTION:${e.description}
-            END:VEVENT
-            `;
-                });
-
-                ics += 'END:VCALENDAR';
-                return ics;
             }
-
-            // Trigger ICS download
-            const downloadICSBtn = document.getElementById('download-ics-btn');
-            downloadICSBtn.addEventListener('click', () => {
-                const icsContent = generateICS(partyDetails.schedule);
-                const blob = new Blob([icsContent], { type: 'text/calendar' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'Weekend_in_Georgia.ics';
-                a.click();
-                URL.revokeObjectURL(url);
-            });
-            // Countdown Logic
-            const countdownTimer = document.getElementById('countdown-timer');
-            const targetDate = new Date("September 4, 2025 00:00:00").getTime();
-
-            const updateCountdown = () => {
-                const now = new Date().getTime();
-                const distance = targetDate - now;
-
-                if (distance < 0) {
-                    clearInterval(countdownInterval);
-                    countdownTimer.textContent = "The adventure has begun!";
-                    return;
-                }
-
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
-
-                countdownTimer.textContent = `Starts in: ${days}:${hours}:${minutes}:${seconds}`;
-            };
-
-            const countdownInterval = setInterval(updateCountdown, 1000);
-            updateCountdown();
         });
     </script>
 </body>
